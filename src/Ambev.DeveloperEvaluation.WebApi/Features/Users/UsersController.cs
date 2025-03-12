@@ -73,20 +73,22 @@ public class UsersController : BaseController
     public async Task<IActionResult> GetUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var request = new GetUserRequest { Id = id };
+
         var validator = new GetUserRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
         if (!validationResult.IsValid)
             return BadRequest(validationResult.Errors);
 
-        var command = _mapper.Map<GetUserCommand>(request.Id);
-        var response = await _mediator.Send(command, cancellationToken);
+        var command = _mapper.Map<GetUserCommand>(request); 
+        var result = await _mediator.Send(command, cancellationToken);
+
+        var response = _mapper.Map<GetUserResponse>(result); 
 
         return Ok(new ApiResponseWithData<GetUserResponse>
         {
             Success = true,
             Message = "User retrieved successfully",
-            Data = _mapper.Map<GetUserResponse>(response)
+            Data = response
         });
     }
 

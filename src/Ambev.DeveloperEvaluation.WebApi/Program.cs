@@ -13,6 +13,7 @@ using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 namespace Ambev.DeveloperEvaluation.WebApi;
@@ -66,7 +67,14 @@ public class Program
             //  Configuração dos Endpoints e Health Checks
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API" });
+                c.MapType<Guid>(() => new OpenApiSchema { Type = "string", Format = null });
+                c.DescribeAllParametersInCamelCase();
+            });
+
             builder.AddBasicHealthChecks();
 
             //  Criar a Aplicação
