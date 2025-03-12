@@ -15,6 +15,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 
 namespace Ambev.DeveloperEvaluation.IoC.ModuleInitializers;
 
@@ -37,6 +38,7 @@ public class ApplicationModuleInitializer : IModuleInitializer
             cfg.RegisterServicesFromAssemblyContaining<CancelSaleHandler>();
             cfg.RegisterServicesFromAssemblyContaining<CreateProductHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetProductHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<GetProductsHandler>();
             cfg.RegisterServicesFromAssemblyContaining<UpdateProductHandler>();
             cfg.RegisterServicesFromAssemblyContaining<CreateBranchHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetBranchHandler>();

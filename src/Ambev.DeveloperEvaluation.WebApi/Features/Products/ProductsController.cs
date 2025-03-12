@@ -10,6 +10,8 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateP
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -85,9 +87,47 @@ public class ProductsController : BaseController
             Success = true,
             Message = "Product created successfully",
             Data = response
+        }); 
+    }
+
+    /// <summary>
+    /// Retrieves a list of products based on optional filters.
+    /// </summary>
+    [HttpGet]
+    [Authorize(Roles = "Admin")] // Apenas administradores podem listar produtos
+    [ProducesResponseType(typeof(ApiResponseWithData<List<GetProductsResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetProducts([FromQuery] GetProductsRequest request, CancellationToken cancellationToken)
+    {
+        var query = new GetProductsQuery
+        {
+            Name = request.Name,
+            MinPrice = request.MinPrice,
+            MaxPrice = request.MaxPrice
+        };
+
+        var products = await _mediator.Send(query, cancellationToken);
+
+        if (products == null || products.Count == 0)
+        {
+            return Ok(new ApiResponseWithData<List<GetProductsResponse>>
+            {
+                Success = false,
+                Message = "Nenhum produto encontrado.",
+                Data = new List<GetProductsResponse>()
+            });
+        }
+
+        var response = _mapper.Map<List<GetProductsResponse>>(products);
+
+        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<List<GetProductsResponse>>
+        {
+            Success = true,
+            Message = "Products found successfully",
+            Data = response
         });
 
- 
+
     }
 
     /// <summary>
