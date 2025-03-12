@@ -1,9 +1,9 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 
 /// <summary>
 /// Represents the request model for creating or updating a branch.
 /// </summary>
-public class BranchRequest
+public class CreateBranchRequest
 {
     /// <summary>
     /// Gets or sets the branch name.

@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 
 /// <summary>
 /// Validator for BranchRequest.
 /// </summary>
-public class BranchRequestValidator : AbstractValidator<BranchRequest>
+public class CreateBranchRequestValidator : AbstractValidator<CreateBranchRequest>
 {
-    public BranchRequestValidator()
+    public CreateBranchRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

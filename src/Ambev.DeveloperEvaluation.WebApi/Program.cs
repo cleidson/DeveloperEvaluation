@@ -6,7 +6,7 @@ using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.IoC;
 using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
-using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
@@ -51,7 +51,7 @@ public class Program
             builder.Services.AddScoped<IValidator<GetProductRequest>, GetProductRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductsRequest>, GetProductsRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
-            builder.Services.AddScoped<IValidator<BranchRequest>, BranchRequestValidator>();
+            builder.Services.AddScoped<IValidator<CreateBranchRequest>, CreateBranchRequestValidator>();
 
             //  AutoMapper
             builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(ApplicationLayer).Assembly);

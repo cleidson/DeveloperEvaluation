@@ -6,7 +6,7 @@ using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.Application.Branchs.CreateBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
-using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 
@@ -32,11 +32,11 @@ public class BranchsController : BaseController
     /// </summary>
     [HttpPost]
     [Authorize(Roles = "Admin")] //  Apenas administradores podem criar filiais
-    [ProducesResponseType(typeof(ApiResponseWithData<BranchResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponseWithData<CreateBranchResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateBranch([FromBody] BranchRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateBranch([FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
     {
-        var validator = new BranchRequestValidator();
+        var validator = new CreateBranchRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -46,9 +46,9 @@ public class BranchsController : BaseController
         var branch = await _mediator.Send(command, cancellationToken); // Aqui deve retornar um objeto Branch
 
         // Converte para resposta corretamente
-        var response = _mapper.Map<BranchResponse>(branch);
+        var response = _mapper.Map<CreateBranchResponse>(branch);
 
-        return Created("api/branches/" + response.Id, new ApiResponseWithData<BranchResponse>
+        return Created("api/branches/" + response.Id, new ApiResponseWithData<CreateBranchResponse>
         {
             Success = true,
             Message = "Branch created successfully",
@@ -62,7 +62,7 @@ public class BranchsController : BaseController
     /// Retrieves a branch by its ID.
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<BranchResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponseWithData<CreateBranchResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBranch([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -72,7 +72,7 @@ public class BranchsController : BaseController
         if (branch == null)
             return NotFound("Filial não encontrada.");
 
-        return Ok(_mapper.Map<BranchResponse>(branch));
+        return Ok(_mapper.Map<CreateBranchResponse>(branch));
     }
 
     /// <summary>
@@ -82,9 +82,9 @@ public class BranchsController : BaseController
     [Authorize(Roles = "Manager,Admin")] //  Apenas gerentes e administradores podem atualizar
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> UpdateBranch([FromRoute] Guid id, [FromBody] BranchRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateBranch([FromRoute] Guid id, [FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
     {
-        var validator = new BranchRequestValidator();
+        var validator = new CreateBranchRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
