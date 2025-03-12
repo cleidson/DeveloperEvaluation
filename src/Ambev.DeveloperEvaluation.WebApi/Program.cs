@@ -70,7 +70,7 @@ public class Program
             //builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DeveloperEvaluation API" });
                 c.MapType<Guid>(() => new OpenApiSchema { Type = "string", Format = null });
                 c.DescribeAllParametersInCamelCase();
             });

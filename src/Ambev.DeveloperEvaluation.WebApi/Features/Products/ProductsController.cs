@@ -36,16 +36,22 @@ public class ProductsController : BaseController
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request, CancellationToken cancellationToken)
     {
-        var validator = new ProductRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
         var command = _mapper.Map<CreateProductCommand>(request);
-        var product = await _mediator.Send(command, cancellationToken);
+        var productId = await _mediator.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(GetProduct), new { id = product }, _mapper.Map<ProductResponse>(product));
+        var productResponse = new ProductResponse
+        {
+            ProductId = productId, // Ajustando para o nome correto
+            Name = request.Name,
+            Price = request.Price
+        };
+
+        return CreatedAtAction(nameof(GetProduct), new { id = productId }, new ApiResponseWithData<ProductResponse>
+        {
+            Success = true,
+            Message = "Product created successfully",
+            Data = productResponse
+        });
     }
 
     /// <summary>
