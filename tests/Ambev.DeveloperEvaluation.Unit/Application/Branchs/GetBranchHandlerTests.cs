@@ -1,4 +1,4 @@
-using Ambev.DeveloperEvaluation.Application.Branches.GetBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Domain.Entities;

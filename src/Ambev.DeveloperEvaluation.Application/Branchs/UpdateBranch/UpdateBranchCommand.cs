@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.UpdateBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch;
 
 /// <summary>
 /// Command to update a branch.

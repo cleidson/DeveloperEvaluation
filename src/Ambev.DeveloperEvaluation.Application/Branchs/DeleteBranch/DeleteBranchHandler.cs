@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.DeleteBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.DeleteBranch;
 
 /// <summary>
 /// Handles the DeleteBranchCommand.

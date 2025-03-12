@@ -4,7 +4,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.GetBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 
 /// <summary>
 /// Handles the GetBranchQuery.

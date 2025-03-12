@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.CreateBranch;
 
 /// <summary>
 /// Handles the CreateBranchCommand.

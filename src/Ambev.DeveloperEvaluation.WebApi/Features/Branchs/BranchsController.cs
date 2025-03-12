@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
-using Ambev.DeveloperEvaluation.Application.Branches.GetBranch;
-using Ambev.DeveloperEvaluation.Application.Branches.UpdateBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.CreateBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
@@ -16,12 +16,12 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize] //  Todos os endpoints exigem autenticação
-public class BranchesController : BaseController
+public class BranchsController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
 
-    public BranchesController(IMediator mediator, IMapper mapper)
+    public BranchsController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;

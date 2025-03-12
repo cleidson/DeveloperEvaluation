@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.CreateBranch;
 
 /// <summary>
 /// Command to create a branch.

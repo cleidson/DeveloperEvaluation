@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.GetBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 
 /// <summary>
 /// Represents the result of retrieving a branch.

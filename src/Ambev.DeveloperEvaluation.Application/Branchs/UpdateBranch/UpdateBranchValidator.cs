@@ -1,15 +1,18 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
+namespace Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch;
 
 /// <summary>
-/// Validator for CreateBranchCommand.
+/// Validator for UpdateBranchCommand.
 /// Ensures that all required fields are provided.
 /// </summary>
-public class CreateBranchValidator : AbstractValidator<CreateBranchCommand>
+public class UpdateBranchValidator : AbstractValidator<UpdateBranchCommand>
 {
-    public CreateBranchValidator()
+    public UpdateBranchValidator()
     {
+        RuleFor(b => b.BranchId)
+            .NotEmpty().WithMessage("O ID da filial é obrigatório.");
+
         RuleFor(b => b.Name)
             .NotEmpty().WithMessage("O nome da filial é obrigatório.")
             .MaximumLength(100).WithMessage("O nome da filial não pode ter mais de 100 caracteres.");
@@ -17,9 +20,5 @@ public class CreateBranchValidator : AbstractValidator<CreateBranchCommand>
         RuleFor(b => b.Address)
             .NotEmpty().WithMessage("O endereço da filial é obrigatório.")
             .MaximumLength(200).WithMessage("O endereço da filial não pode ter mais de 200 caracteres.");
-       
-        RuleFor(b => b.Location)
-            .NotEmpty().WithMessage("A localização da filial é obrigatório.")
-            .MaximumLength(200).WithMessage("A localização da filial não pode ter mais de 200 caracteres.");
     }
 }
