@@ -6,7 +6,7 @@ using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 using Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -32,21 +32,21 @@ public class ProductsController : BaseController
     /// </summary>
     [HttpPost]
     [Authorize(Roles = "Admin")] //  Apenas administradores podem criar produtos
-    [ProducesResponseType(typeof(ApiResponseWithData<ProductResponse>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponseWithData<CreateProductResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateProduct([FromBody] ProductRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
     {
         var command = _mapper.Map<CreateProductCommand>(request);
         var productId = await _mediator.Send(command, cancellationToken);
 
-        var productResponse = new ProductResponse
+        var productResponse = new CreateProductResponse
         {
             ProductId = productId, // Ajustando para o nome correto
             Name = request.Name,
             Price = request.Price
         };
 
-        return CreatedAtAction(nameof(GetProduct), new { id = productId }, new ApiResponseWithData<ProductResponse>
+        return CreatedAtAction(nameof(GetProduct), new { id = productId }, new ApiResponseWithData<CreateProductResponse>
         {
             Success = true,
             Message = "Product created successfully",
@@ -58,7 +58,7 @@ public class ProductsController : BaseController
     /// Retrieves a product by its ID.
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<ProductResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponseWithData<CreateProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -68,7 +68,7 @@ public class ProductsController : BaseController
         if (product == null)
             return NotFound("Produto não encontrado.");
 
-        return Ok(_mapper.Map<ProductResponse>(product));
+        return Ok(_mapper.Map<CreateProductResponse>(product));
     }
 
     /// <summary>
@@ -78,9 +78,9 @@ public class ProductsController : BaseController
     [Authorize(Roles = "Admin")] //  Apenas administradores podem atualizar produtos
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] ProductRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] CreateProductRequest request, CancellationToken cancellationToken)
     {
-        var validator = new ProductRequestValidator();
+        var validator = new CreateProductRequestValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)

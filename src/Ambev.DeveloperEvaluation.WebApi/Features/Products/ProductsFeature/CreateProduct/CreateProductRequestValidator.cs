@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
 
 /// <summary>
 /// Validator for ProductRequest.
 /// </summary>
-public class ProductRequestValidator : AbstractValidator<ProductRequest>
+public class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>
 {
-    public ProductRequestValidator()
+    public CreateProductRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

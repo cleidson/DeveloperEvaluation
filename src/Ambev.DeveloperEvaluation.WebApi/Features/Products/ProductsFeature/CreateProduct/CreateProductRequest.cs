@@ -1,9 +1,9 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature;
+﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
 
 /// <summary>
 /// Represents the request model for creating or updating a product.
 /// </summary>
-public class ProductRequest
+public class CreateProductRequest
 {
     /// <summary>
     /// Gets or sets the product name.
