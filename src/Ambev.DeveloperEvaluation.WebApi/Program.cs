@@ -8,6 +8,7 @@ using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
@@ -50,6 +51,7 @@ public class Program
             builder.Services.AddScoped<IValidator<SaleRequest>, SaleRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductRequest>, GetProductRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductsRequest>, GetProductsRequestValidator>();
+            builder.Services.AddScoped<IValidator<DeleteProductRequest>, DeleteProductRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateBranchRequest>, CreateBranchRequestValidator>();
 

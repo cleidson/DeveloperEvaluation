@@ -12,6 +12,8 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProd
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
+using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.DeleteProduct;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -125,9 +127,36 @@ public class ProductsController : BaseController
             Success = true,
             Message = "Products found successfully",
             Data = response
-        });
+        }); 
+    }
 
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")] // Apenas administradores podem deletar produtos
+    [ProducesResponseType(typeof(ApiResponseWithData<DeleteProductResult>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteProduct([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProductCommand { ProductId = id };
+        var result = await _mediator.Send(command, cancellationToken);
 
+        if (!result.Success)
+        {
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = result.Message
+            });
+        }
+
+        var response = _mapper.Map<DeleteProductResult>(result);
+
+        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<DeleteProductResult>
+        {
+            Success = true,
+            Message = "Products found successfully",
+            Data = response
+        }); 
     }
 
     /// <summary>
