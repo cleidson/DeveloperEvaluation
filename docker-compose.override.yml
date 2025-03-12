@@ -1,0 +1,5 @@
+version: '3.8'
+
+services:
+  ambev.developerevaluation.webapi:
+    entrypoint: ["/bin/sh", "-c", "dotnet ef database update --no-build --verbose && dotnet Ambev.DeveloperEvaluation.WebApi.dll"]
