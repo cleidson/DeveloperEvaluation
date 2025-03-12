@@ -17,5 +17,9 @@ public class CreateBranchValidator : AbstractValidator<CreateBranchCommand>
         RuleFor(b => b.Address)
             .NotEmpty().WithMessage("O endereço da filial é obrigatório.")
             .MaximumLength(200).WithMessage("O endereço da filial não pode ter mais de 200 caracteres.");
+       
+        RuleFor(b => b.Location)
+            .NotEmpty().WithMessage("A localização da filial é obrigatório.")
+            .MaximumLength(200).WithMessage("A localização da filial não pode ter mais de 200 caracteres.");
     }
 }

@@ -25,7 +25,8 @@ public class CreateBranchHandler : IRequestHandler<CreateBranchCommand, Guid>
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            Address = request.Address
+            Address = request.Address,
+            Location = request.Location 
         };
 
         await _branchRepository.AddAsync(branch);

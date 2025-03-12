@@ -14,4 +14,9 @@ public class BranchRequest
     /// Gets or sets the branch location.
     /// </summary>
     public string Location { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the branch address.
+    /// </summary>
+    public string Address { get; set; } = string.Empty;
 }

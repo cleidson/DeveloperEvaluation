@@ -20,5 +20,12 @@ public class BranchRequestValidator : AbstractValidator<BranchRequest>
             .WithMessage("Branch location is required.")
             .MaximumLength(200)
             .WithMessage("Branch location must be at most 200 characters.");
+
+        RuleFor(x => x.Address)
+            .NotEmpty()
+            .WithMessage("Branch address is required.")
+            .MaximumLength(200)
+            .WithMessage("Branch address must be at most 200 characters.");
     }
 }
+

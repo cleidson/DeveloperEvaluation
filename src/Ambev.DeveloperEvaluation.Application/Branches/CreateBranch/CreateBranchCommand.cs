@@ -9,5 +9,6 @@ namespace Ambev.DeveloperEvaluation.Application.Branches.CreateBranch;
 public class CreateBranchCommand : IRequest<Guid>
 {
     public string? Name { get; set; }
-    public string? Address { get; set; }
+    public string? Address { get; set; }   
+    public string? Location { get; set; }  
 }

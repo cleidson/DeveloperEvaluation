@@ -43,10 +43,20 @@ public class BranchesController : BaseController
             return BadRequest(validationResult.Errors);
 
         var command = _mapper.Map<CreateBranchCommand>(request);
-        var branch = await _mediator.Send(command, cancellationToken);
+        var branch = await _mediator.Send(command, cancellationToken); // Aqui deve retornar um objeto Branch
 
-        return CreatedAtAction(nameof(GetBranch), new { id = branch }, _mapper.Map<BranchResponse>(branch));
+        // Converte para resposta corretamente
+        var response = _mapper.Map<BranchResponse>(branch);
+
+        return Created("api/branches/" + response.Id, new ApiResponseWithData<BranchResponse>
+        {
+            Success = true,
+            Message = "Branch created successfully",
+            Data = response
+        });
+
     }
+
 
     /// <summary>
     /// Retrieves a branch by its ID.
