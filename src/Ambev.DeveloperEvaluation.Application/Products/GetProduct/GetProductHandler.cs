@@ -9,7 +9,7 @@ namespace Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 /// <summary>
 /// Handles the GetProductQuery.
 /// </summary>
-public class GetProductHandler : IRequestHandler<GetProductQuery, GetProductResult>
+public class GetProductHandler : IRequestHandler<GetProductQuery, GetProductResult?>
 {
     private readonly IProductRepository _productRepository;
 
@@ -18,11 +18,15 @@ public class GetProductHandler : IRequestHandler<GetProductQuery, GetProductResu
         _productRepository = productRepository;
     }
 
-    public async Task<GetProductResult> Handle(GetProductQuery request, CancellationToken cancellationToken)
+    public async Task<GetProductResult?> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.ProductId);
+
         if (product == null)
-            throw new InvalidOperationException("Produto não encontrado.");
+        {
+            // Retorna null ao invés de lançar uma exceção
+            return null;
+        }
 
         return new GetProductResult
         {

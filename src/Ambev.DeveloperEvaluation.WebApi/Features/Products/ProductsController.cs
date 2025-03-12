@@ -61,11 +61,10 @@ public class ProductsController : BaseController
         });
     }
 
-    /// <summary>
-    /// Retrieves a product by its ID.
-    /// </summary>
+     
+
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin")] // Apenas Admins podem acessar
+    [Authorize(Roles = "Admin")] // Apenas administradores podem buscar produtos
     [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -78,7 +77,7 @@ public class ProductsController : BaseController
             return NotFound(new ApiResponse
             {
                 Success = false,
-                Message = "Product not found"
+                Message = "Produto não encontrado."
             });
         }
 
@@ -89,8 +88,10 @@ public class ProductsController : BaseController
             Success = true,
             Message = "Product created successfully",
             Data = response
-        }); 
+        });
     }
+
+
 
     /// <summary>
     /// Retrieves a list of products based on optional filters.
