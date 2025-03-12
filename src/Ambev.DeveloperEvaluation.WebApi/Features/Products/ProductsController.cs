@@ -7,6 +7,9 @@ using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 using Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -58,7 +61,8 @@ public class ProductsController : BaseController
     /// Retrieves a product by its ID.
     /// </summary>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(ApiResponseWithData<CreateProductResponse>), StatusCodes.Status200OK)]
+    [Authorize(Roles = "Admin")] // Apenas Admins podem acessar
+    [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -66,9 +70,24 @@ public class ProductsController : BaseController
         var product = await _mediator.Send(query, cancellationToken);
 
         if (product == null)
-            return NotFound("Produto não encontrado.");
+        {
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = "Product not found"
+            });
+        }
 
-        return Ok(_mapper.Map<CreateProductResponse>(product));
+        var response = _mapper.Map<GetProductResponse>(product);
+
+        return Created("api/products/" + response.ProductId, new ApiResponseWithData<GetProductResponse>
+        {
+            Success = true,
+            Message = "Product created successfully",
+            Data = response
+        });
+
+ 
     }
 
     /// <summary>
