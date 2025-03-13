@@ -11,6 +11,7 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateP
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.UpdateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
 using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using FluentValidation;
@@ -51,6 +52,7 @@ public class Program
             builder.Services.AddScoped<IValidator<SaleRequest>, SaleRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductRequest>, GetProductRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductsRequest>, GetProductsRequestValidator>();
+            builder.Services.AddScoped<IValidator<UpdateProductRequest>, UpdateProductRequestValidator>();
             builder.Services.AddScoped<IValidator<DeleteProductRequest>, DeleteProductRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateProductRequest>, CreateProductRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateBranchRequest>, CreateBranchRequestValidator>();

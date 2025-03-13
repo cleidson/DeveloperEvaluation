@@ -14,6 +14,7 @@ using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.DeleteProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.UpdateProduct;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -93,6 +94,7 @@ public class ProductsController : BaseController
 
 
 
+
     /// <summary>
     /// Retrieves a list of products based on optional filters.
     /// </summary>
@@ -164,24 +166,35 @@ public class ProductsController : BaseController
     /// Updates a product. Only Admins can update products.
     /// </summary>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Admin")] //  Apenas administradores podem atualizar produtos
-    [ProducesResponseType(200)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] CreateProductRequest request, CancellationToken cancellationToken)
+    [Authorize(Roles = "Admin")] // Apenas administradores podem atualizar produtos
+    [ProducesResponseType(typeof(ApiResponseWithData<UpdateProductResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        var validator = new CreateProductRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
         var command = _mapper.Map<UpdateProductCommand>(request);
         command.ProductId = id;
+
         var result = await _mediator.Send(command, cancellationToken);
 
-        if (!result)
-            return BadRequest("Não foi possível atualizar o produto.");
+        if (!result.Success)
+        {
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = result.Message
+            });
+        }
 
-        return Ok(new { Message = "Produto atualizado com sucesso." });
+
+        var response = _mapper.Map<UpdateProductResult>(result);
+
+        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<UpdateProductResult>
+        {
+            Success = true,
+            Message = "Products updated successfully",
+            Data = response
+        });
+ 
     }
-}
+} 

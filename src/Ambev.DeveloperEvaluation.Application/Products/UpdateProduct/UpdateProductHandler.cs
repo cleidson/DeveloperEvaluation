@@ -9,7 +9,7 @@ namespace Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
 /// <summary>
 /// Handles the UpdateProductCommand.
 /// </summary>
-public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
+public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, UpdateProductResult>
 {
     private readonly IProductRepository _productRepository;
 
@@ -18,16 +18,28 @@ public class UpdateProductHandler : IRequestHandler<UpdateProductCommand, bool>
         _productRepository = productRepository;
     }
 
-    public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateProductResult> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.ProductId);
         if (product == null)
-            throw new InvalidOperationException("Produto não encontrado.");
+        {
+            return new UpdateProductResult
+            {
+                Success = false,
+                Message = "Produto não encontrado."
+            };
+        }
 
         product.Name = request.Name;
         product.Price = request.Price;
 
         await _productRepository.UpdateAsync(product);
-        return true;
+
+        return new UpdateProductResult
+        {
+            Success = true,
+            Message = "Produto atualizado com sucesso.",
+            ProductId = product.Id
+        };
     }
 }
