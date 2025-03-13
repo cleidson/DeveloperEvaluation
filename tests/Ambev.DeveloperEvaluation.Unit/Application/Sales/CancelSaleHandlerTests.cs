@@ -7,6 +7,7 @@ using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Unit.Domain;
 using AutoMapper;
 using FluentAssertions;
+using MediatR;
 using NSubstitute;
 using Xunit;
 
@@ -16,11 +17,12 @@ public class CancelSaleHandlerTests
 {
     private readonly ISaleRepository _saleRepository;
     private readonly CancelSaleHandler _handler;
-
+    private readonly  IMediator _mediator;
     public CancelSaleHandlerTests()
     {
         _saleRepository = Substitute.For<ISaleRepository>();
-        _handler = new CancelSaleHandler(_saleRepository);
+        _mediator = Substitute.For<IMediator>();
+        _handler = new CancelSaleHandler(_saleRepository,_mediator);
     }
 
     [Fact(DisplayName = "Given a valid sale When canceling Then updates status to cancelled")]

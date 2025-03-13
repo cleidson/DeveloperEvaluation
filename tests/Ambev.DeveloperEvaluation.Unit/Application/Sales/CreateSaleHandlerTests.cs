@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Application.Sales.CancelSale;
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Users.CreateUser;
 using Ambev.DeveloperEvaluation.Common.Security;
@@ -7,6 +8,7 @@ using Ambev.DeveloperEvaluation.Unit.Domain;
 using Ambev.DeveloperEvaluation.Unit.Domain.Entities.TestData;
 using AutoMapper;
 using FluentAssertions;
+using MediatR;
 using NSubstitute;
 using Xunit;
 
@@ -17,13 +19,15 @@ namespace Ambev.DeveloperEvaluation.Unit.Application.Sales;
 /// </summary>
 public class CreateSaleHandlerTests
 {
+    private readonly IMediator _mediator;
     private readonly ISaleRepository _saleRepository;
     private readonly CreateSaleHandler _handler;
 
     public CreateSaleHandlerTests()
     {
+        _mediator = Substitute.For<IMediator>();
         _saleRepository = Substitute.For<ISaleRepository>();
-        _handler = new CreateSaleHandler(_saleRepository);
+        _handler = new CreateSaleHandler(_saleRepository, _mediator);
     }
 
     [Fact(DisplayName = "Given valid sale data When creating sale Then returns success response")]

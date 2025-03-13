@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Ambev.DeveloperEvaluation.Application.Branchs.GetBranchs;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
+using Ambev.DeveloperEvaluation.Domain.Events.Sales;
+using Ambev.DeveloperEvaluation.Application.Events.Sales;
 
 public class ApplicationModuleInitializer : IModuleInitializer
 {
@@ -54,6 +56,11 @@ public class ApplicationModuleInitializer : IModuleInitializer
             cfg.RegisterServicesFromAssemblyContaining<GetBranchHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetBranchsHandler>();
             cfg.RegisterServicesFromAssemblyContaining<UpdateBranchHandler>();
+
+            cfg.RegisterServicesFromAssemblyContaining<SaleCreatedEventHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<SaleModifiedEventHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<SaleCancelledEventHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<ItemCancelledEventHandler>();
         });
         // User Validators
         builder.Services.AddScoped<IValidator<DeleteUserCommand>, DeleteUserValidator>();

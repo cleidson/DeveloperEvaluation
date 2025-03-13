@@ -1,5 +1,6 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Events.Sales;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using MediatR;
 using System;
@@ -15,12 +16,13 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
+    private readonly IMediator _mediator;
 
-    public CreateSaleHandler(ISaleRepository saleRepository)
+    public CreateSaleHandler(ISaleRepository saleRepository, IMediator mediator)
     {
         _saleRepository = saleRepository;
+        _mediator = mediator;
     }
-
     public async Task<CreateSaleResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
         var sale = new Sale
@@ -37,6 +39,9 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
 
         ApplyDiscounts(sale);
         await _saleRepository.AddAsync(sale);
+
+        await _mediator.Publish(new SaleCreatedEvent(sale.Id, sale.SaleDate, sale.CustomerId, sale.TotalAmount), cancellationToken);
+
 
         return new CreateSaleResult
         {
