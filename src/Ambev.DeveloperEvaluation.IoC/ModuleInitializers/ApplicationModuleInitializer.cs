@@ -53,14 +53,18 @@ public class ApplicationModuleInitializer : IModuleInitializer
             cfg.RegisterServicesFromAssemblyContaining<GetBranchsHandler>();
             cfg.RegisterServicesFromAssemblyContaining<UpdateBranchHandler>();
         });
-
-        // FluentValidation - Registra automaticamente todos os validadores
-        builder.Services.AddScoped<IValidator<DeleteProductCommand>, DeleteProductValidator>();
-        builder.Services.AddScoped<IValidator<DeleteBranchCommand>, DeleteBranchValidator>();
+        // User Validators
         builder.Services.AddScoped<IValidator<DeleteUserCommand>, DeleteUserValidator>();
+
+        // Branch Validators
+        builder.Services.AddScoped<IValidator<CreateBranchCommand>, CreateBranchValidator>();
         builder.Services.AddScoped<IValidator<UpdateBranchCommand>, UpdateBranchValidator>();
+        builder.Services.AddScoped<IValidator<DeleteBranchCommand>, DeleteBranchValidator>(); 
 
-
+        // Product Validators
+        builder.Services.AddScoped<IValidator<CreateProductCommand>, CreateProductValidator>();
+        builder.Services.AddScoped<IValidator<UpdateProductCommand>, UpdateProductValidator>();
+        builder.Services.AddScoped<IValidator<DeleteProductCommand>, DeleteProductValidator>(); 
 
     }
 }

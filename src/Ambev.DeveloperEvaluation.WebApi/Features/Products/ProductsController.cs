@@ -1,20 +1,17 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Ambev.DeveloperEvaluation.WebApi.Common;
-using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+﻿using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.UpdateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProduct;
-
-using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
-using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.UpdateProduct;
+using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -49,23 +46,18 @@ public class ProductsController : BaseController
 
         var productResponse = new CreateProductResponse
         {
-            ProductId = productId, // Ajustando para o nome correto
+            ProductId = productId, 
             Name = request.Name,
             Price = request.Price
         };
 
-        return CreatedAtAction(nameof(GetProduct), new { id = productId }, new ApiResponseWithData<CreateProductResponse>
-        {
-            Success = true,
-            Message = "Product created successfully",
-            Data = productResponse
-        });
+        return Ok(productResponse);
     }
 
      
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin")] // Apenas administradores podem buscar produtos
+    [Authorize(Roles = "Admin")] 
     [ProducesResponseType(typeof(ApiResponseWithData<GetProductResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProduct([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -84,12 +76,7 @@ public class ProductsController : BaseController
 
         var response = _mapper.Map<GetProductResponse>(product);
 
-        return Created("api/products/" + response.ProductId, new ApiResponseWithData<GetProductResponse>
-        {
-            Success = true,
-            Message = "Product created successfully",
-            Data = response
-        });
+        return Ok(response);
     }
 
 
@@ -125,12 +112,7 @@ public class ProductsController : BaseController
 
         var response = _mapper.Map<List<GetProductsResponse>>(products);
 
-        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<List<GetProductsResponse>>
-        {
-            Success = true,
-            Message = "Products found successfully",
-            Data = response
-        }); 
+        return Ok(response); 
     }
 
     [HttpDelete("{id}")]
@@ -154,12 +136,7 @@ public class ProductsController : BaseController
 
         var response = _mapper.Map<DeleteProductResult>(result);
 
-        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<DeleteProductResult>
-        {
-            Success = true,
-            Message = "Products found successfully",
-            Data = response
-        }); 
+        return Ok(response); 
     }
 
     /// <summary>
@@ -185,16 +162,8 @@ public class ProductsController : BaseController
                 Message = result.Message
             });
         }
-
-
         var response = _mapper.Map<UpdateProductResult>(result);
 
-        return CreatedAtAction(nameof(GetProducts), new ApiResponseWithData<UpdateProductResult>
-        {
-            Success = true,
-            Message = "Products updated successfully",
-            Data = response
-        });
- 
+        return Ok(response);
     }
 } 
