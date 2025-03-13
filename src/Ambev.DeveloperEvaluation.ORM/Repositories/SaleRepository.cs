@@ -23,7 +23,7 @@ public class SaleRepository : ISaleRepository
             .Include(s => s.SaleItems)
             .FirstOrDefaultAsync(s => s.Id == id);
 
-        return sale ?? throw new KeyNotFoundException($"Venda com ID {id} não encontrada.");
+        return sale;
     }
 
 

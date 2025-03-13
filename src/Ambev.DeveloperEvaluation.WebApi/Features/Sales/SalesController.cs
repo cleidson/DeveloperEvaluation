@@ -2,14 +2,17 @@
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
+using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSale;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSales;
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OneOf.Types;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,6 +21,7 @@ public class SalesController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+     
 
     public SalesController(IMediator mediator, IMapper mapper)
     {
@@ -112,5 +116,28 @@ public class SalesController : BaseController
         return Ok(result);
     }
 
+
+    /// <summary>
+    /// Updates a sale.
+    /// </summary>
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Manager,Admin")] 
+    [ProducesResponseType(typeof(ApiResponseWithData<UpdateSaleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateSale([FromRoute] Guid id, [FromBody] UpdateSaleRequest request, CancellationToken cancellationToken)
+    {
+        if (id != request.SaleId)
+            return BadRequest("O ID da venda na URL deve ser igual ao ID da requisição.");
+
+        var command = _mapper.Map<UpdateSaleCommand>(request);
+        var result = await _mediator.Send(command, cancellationToken);
+
+
+        if (!result.Success)
+            return BadRequest(result);
+
+
+        return Ok(result);
+    }
 
 }

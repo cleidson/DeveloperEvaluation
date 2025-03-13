@@ -71,6 +71,7 @@ public class Program
             builder.Services.AddScoped<IValidator<GetSaleRequest>, GetSaleRequestValidator>();
             builder.Services.AddScoped<IValidator<GetSalesRequest>, GetSalesRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateSaleItemRequest>, CreateSaleItemRequestValidator>();
+            builder.Services.AddScoped<IValidator<UpdateSaleRequest>, UpdateSaleRequestValidator>();
 
 
             //  AutoMapper
