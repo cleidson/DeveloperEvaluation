@@ -58,8 +58,9 @@ public class ApplicationModuleInitializer : IModuleInitializer
         builder.Services.AddScoped<IValidator<DeleteProductCommand>, DeleteProductValidator>();
         builder.Services.AddScoped<IValidator<DeleteBranchCommand>, DeleteBranchValidator>();
         builder.Services.AddScoped<IValidator<DeleteUserCommand>, DeleteUserValidator>();
-        
- 
+        builder.Services.AddScoped<IValidator<UpdateBranchCommand>, UpdateBranchValidator>();
+
+
 
     }
 }

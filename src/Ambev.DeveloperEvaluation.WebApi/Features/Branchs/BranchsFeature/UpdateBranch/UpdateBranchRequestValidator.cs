@@ -1,17 +1,14 @@
 ﻿using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature.UpdateBranch
 {
     /// <summary>
-    /// Validator for UpdateBranchCommand.
+    /// Validator for UpdateBranchRequest.
     /// </summary>
-    public class UpdateBranchValidator : AbstractValidator<UpdateBranchCommand>
+    public class UpdateBranchRequestValidator : AbstractValidator<UpdateBranchRequest>
     {
-        public UpdateBranchValidator()
+        public UpdateBranchRequestValidator()
         {
-            RuleFor(x => x.BranchId)
-                .NotEmpty().WithMessage("O ID da filial é obrigatório.");
-
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("O nome da filial é obrigatório.")
                 .MaximumLength(100).WithMessage("O nome da filial não pode ter mais de 100 caracteres.");

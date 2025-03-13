@@ -8,6 +8,7 @@ using Ambev.DeveloperEvaluation.ORM;
 using Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature.DeleteBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature.GetBranchs;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature.UpdateBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranchs;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.CreateProduct;
@@ -61,6 +62,7 @@ public class Program
             builder.Services.AddScoped<IValidator<DeleteBranchRequest>, DeleteBranchRequestValidator>();
             builder.Services.AddScoped<IValidator<CreateBranchRequest>, CreateBranchRequestValidator>();
             builder.Services.AddScoped<IValidator<GetBranchsRequest>, GetBranchsRequestValidator>();
+            builder.Services.AddScoped<IValidator<UpdateBranchRequest>, UpdateBranchRequestValidator>();
 
 
             //  AutoMapper

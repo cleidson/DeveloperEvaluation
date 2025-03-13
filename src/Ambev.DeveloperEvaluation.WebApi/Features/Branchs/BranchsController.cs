@@ -12,6 +12,7 @@ using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.GetBranchs;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranchs;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branches.BranchesFeature.UpdateBranch;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 
@@ -116,26 +117,29 @@ public class BranchsController : BaseController
     /// Updates a branch. Only Managers and Admins can update branches.
     /// </summary>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Manager,Admin")] 
-    [ProducesResponseType(200)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> UpdateBranch([FromRoute] Guid id, [FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
+    [Authorize(Roles = "Manager,Admin")]
+    [ProducesResponseType(typeof(ApiResponseWithData<UpdateBranchResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateBranch([FromRoute] Guid id, [FromBody] UpdateBranchRequest request, CancellationToken cancellationToken)
     {
-        var validator = new CreateBranchRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
         var command = _mapper.Map<UpdateBranchCommand>(request);
         command.BranchId = id;
+
         var result = await _mediator.Send(command, cancellationToken);
 
-        if (!result)
-            return BadRequest("Não foi possível atualizar a filial.");
+        if (!result.Success)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = result.Message
+            });
+        }
 
-        return Ok(new { Message = "Filial atualizada com sucesso." });
+        return Ok(_mapper.Map<UpdateBranchResponse>(result));
     }
+
 
 
     /// <summary>
