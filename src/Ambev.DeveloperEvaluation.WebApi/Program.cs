@@ -53,7 +53,7 @@ public class Program
 
             //  FluentValidation (Validadores)
             builder.Services.AddScoped<IValidator<AuthenticateUserRequest>, AuthenticateUserRequestValidator>();
-            builder.Services.AddScoped<IValidator<SaleRequest>, SaleRequestValidator>();
+            
             builder.Services.AddScoped<IValidator<GetProductRequest>, GetProductRequestValidator>();
             builder.Services.AddScoped<IValidator<GetProductsRequest>, GetProductsRequestValidator>();
             builder.Services.AddScoped<IValidator<UpdateProductRequest>, UpdateProductRequestValidator>();
@@ -63,6 +63,11 @@ public class Program
             builder.Services.AddScoped<IValidator<CreateBranchRequest>, CreateBranchRequestValidator>();
             builder.Services.AddScoped<IValidator<GetBranchsRequest>, GetBranchsRequestValidator>();
             builder.Services.AddScoped<IValidator<UpdateBranchRequest>, UpdateBranchRequestValidator>();
+
+            // Sale Validators
+            builder.Services.AddScoped<IValidator<CreateSaleRequest>, CreateSaleRequestValidator>();
+            builder.Services.AddScoped<IValidator<SaleRequest>, SaleRequestValidator>();
+            builder.Services.AddScoped<IValidator<SaleItemRequest>, SaleItemRequestValidator>();
 
 
             //  AutoMapper

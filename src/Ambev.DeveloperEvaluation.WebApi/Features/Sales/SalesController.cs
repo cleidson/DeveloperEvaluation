@@ -25,23 +25,32 @@ public class SalesController : BaseController
     /// <summary>
     /// Creates a new sale. Only customers can create sales.
     /// </summary>
+    /// <summary>
+    /// Creates a new sale. Only customers can create sales.
+    /// </summary>
     [HttpPost]
-    [Authorize(Roles = "Customer")] // Apenas clientes podem criar vendas
-    [ProducesResponseType(typeof(ApiResponseWithData<SaleResponse>), StatusCodes.Status201Created)]
+    [Authorize(Roles = "Customer")] 
+    [ProducesResponseType(typeof(ApiResponseWithData<CreateSaleResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateSale([FromBody] SaleRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateSale([FromBody] CreateSaleRequest request, CancellationToken cancellationToken)
     {
-        var validator = new SaleRequestValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
-
-        if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
-
         var command = _mapper.Map<CreateSaleCommand>(request);
-        var sale = await _mediator.Send(command, cancellationToken);
+        var saleResult = await _mediator.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(GetSale), new { id = sale.Id }, _mapper.Map<SaleResponse>(sale));
+        if (saleResult == null)
+        {
+            return BadRequest(new ApiResponse
+            {
+                Success = false,
+                Message = "Não foi possível criar a venda."
+            });
+        }
+
+        var response = _mapper.Map<CreateSaleResult>(saleResult);
+
+        return Ok(response);
     }
+
 
     /// <summary>
     /// Retrieves a sale by its ID. Customers and Managers can view sales.

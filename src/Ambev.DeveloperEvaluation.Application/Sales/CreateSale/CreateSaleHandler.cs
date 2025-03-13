@@ -12,7 +12,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 /// <summary>
 /// Handles the CreateSaleCommand.
 /// </summary>
-public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, Sale>
+public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
 
@@ -21,21 +21,30 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, Sale>
         _saleRepository = saleRepository;
     }
 
-    public async Task<Sale> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
+    public async Task<CreateSaleResult> Handle(CreateSaleCommand request, CancellationToken cancellationToken)
     {
         var sale = new Sale
-        {
+        { 
             CustomerId = request.CustomerId,
             BranchId = request.BranchId,
             SaleItems = request.SaleItems,
             SaleDate = DateTime.UtcNow,
-            Status = SaleStatus.Pending
+            Status = SaleStatus.Pending, 
+            RegisteredByUserId =  request.CustomerId
+
         };
 
         ApplyDiscounts(sale);
-
         await _saleRepository.AddAsync(sale);
-        return sale;
+
+        return new CreateSaleResult
+        {
+            SaleId = sale.Id,
+            SaleDate = sale.SaleDate,
+            BranchId = sale.BranchId,
+            CustomerId = sale.CustomerId,
+            TotalAmount = sale.TotalAmount 
+        };
     }
 
     /// <summary>
