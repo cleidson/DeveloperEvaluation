@@ -54,12 +54,7 @@ public class BranchsController : BaseController
         // Converte para resposta corretamente
         var response = _mapper.Map<CreateBranchResponse>(branch);
 
-        return Created("api/branches/" + response.Id, new ApiResponseWithData<CreateBranchResponse>
-        {
-            Success = true,
-            Message = "Branch created successfully",
-            Data = response
-        });
+        return Ok(response);
 
     }
 
