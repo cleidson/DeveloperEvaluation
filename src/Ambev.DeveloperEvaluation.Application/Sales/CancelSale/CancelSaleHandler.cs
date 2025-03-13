@@ -26,6 +26,7 @@ public class CancelSaleHandler : IRequestHandler<CancelSaleCommand, bool>
             throw new InvalidOperationException("Venda não encontrada.");
 
         sale.Status = SaleStatus.Cancelled;
+        sale.IsCancelled = true;
         await _saleRepository.UpdateAsync(sale);
         return true;
     }
