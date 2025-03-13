@@ -1,25 +1,34 @@
 ﻿using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
+using AutoMapper;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
-
-/// <summary>
-/// Handles the GetSaleQuery.
-/// </summary>
-public class GetSaleHandler : IRequestHandler<GetSaleQuery, Sale>
+namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale
 {
-    private readonly ISaleRepository _saleRepository;
-
-    public GetSaleHandler(ISaleRepository saleRepository)
+    /// <summary>
+    /// Handles the GetSaleQuery.
+    /// </summary>
+    public class GetSaleHandler : IRequestHandler<GetSaleQuery, GetSaleResult>
     {
-        _saleRepository = saleRepository;
-    }
+        private readonly ISaleRepository _saleRepository;
+        private readonly IMapper _mapper;
 
-    public async Task<Sale> Handle(GetSaleQuery request, CancellationToken cancellationToken)
-    {
-        return await _saleRepository.GetByIdAsync(request.SaleId);
+        public GetSaleHandler(ISaleRepository saleRepository, IMapper mapper)
+        {
+            _saleRepository = saleRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<GetSaleResult> Handle(GetSaleQuery request, CancellationToken cancellationToken)
+        {
+            var sale = await _saleRepository.GetByIdAsync(request.SaleId);
+
+            if (sale == null)
+                return null;
+
+            return _mapper.Map<GetSaleResult>(sale);
+        }
     }
 }

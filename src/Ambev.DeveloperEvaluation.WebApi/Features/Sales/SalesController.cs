@@ -3,6 +3,7 @@ using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSale;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -53,11 +54,11 @@ public class SalesController : BaseController
 
 
     /// <summary>
-    /// Retrieves a sale by its ID. Customers and Managers can view sales.
+    /// Retrieves a sale by its ID.
     /// </summary>
     [HttpGet("{id}")]
-    [Authorize(Roles = "Customer,Manager")] // 🔒 Clientes e gerentes podem visualizar vendas
-    [ProducesResponseType(typeof(ApiResponseWithData<SaleResponse>), StatusCodes.Status200OK)]
+    [Authorize(Roles = "Customer,Manager,Admin")]
+    [ProducesResponseType(typeof(ApiResponseWithData<GetSaleResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSale([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -65,9 +66,9 @@ public class SalesController : BaseController
         var sale = await _mediator.Send(query, cancellationToken);
 
         if (sale == null)
-            return NotFound("Venda não encontrada.");
+            return NotFound(new ApiResponse { Success = false, Message = "Venda não encontrada." });
 
-        return Ok(_mapper.Map<SaleResponse>(sale));
+        return Ok(sale);
     }
 
     /// <summary>

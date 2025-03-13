@@ -30,7 +30,8 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
             SaleItems = request.SaleItems,
             SaleDate = DateTime.UtcNow,
             Status = SaleStatus.Pending, 
-            RegisteredByUserId =  request.CustomerId
+            RegisteredByUserId =  request.CustomerId,
+            SaleNumber = GenerateRandomSaleNumber()
 
         };
 
@@ -79,4 +80,10 @@ public class CreateSaleHandler : IRequestHandler<CreateSaleCommand, CreateSaleRe
         // Calcula o total da venda somando todos os itens
         sale.TotalAmount = sale.SaleItems.Sum(i => i.TotalPrice);
     }
+
+    private string GenerateRandomSaleNumber()
+    {
+        return $"SALE-{Guid.NewGuid().ToString("N").Substring(0, 10).ToUpper()}";
+    }
+
 }

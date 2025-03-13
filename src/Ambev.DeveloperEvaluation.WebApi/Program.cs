@@ -17,6 +17,7 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProd
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.GetProducts;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.ProductsFeature.UpdateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSale;
 using Ambev.DeveloperEvaluation.WebApi.Middleware;
 using FluentValidation;
 using MediatR;
@@ -66,8 +67,8 @@ public class Program
 
             // Sale Validators
             builder.Services.AddScoped<IValidator<CreateSaleRequest>, CreateSaleRequestValidator>();
-            builder.Services.AddScoped<IValidator<SaleRequest>, SaleRequestValidator>();
-            builder.Services.AddScoped<IValidator<SaleItemRequest>, SaleItemRequestValidator>();
+            builder.Services.AddScoped<IValidator<GetSaleRequest>, GetSaleRequestValidator>();
+            builder.Services.AddScoped<IValidator<CreateSaleItemRequest>, CreateSaleItemRequestValidator>();
 
 
             //  AutoMapper

@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSale;
 
 /// <summary>
-/// Represents the result of retrieving a sale.
+/// Response model for retrieving a sale.
 /// </summary>
-public class GetSaleResult
+public class GetSaleResponse
 {
     public Guid SaleId { get; set; }
     public DateTime SaleDate { get; set; }
     public Guid CustomerId { get; set; }
-    public string SaleNumber { get; set; }
     public Guid BranchId { get; set; }
+    public string SaleNumber { get; set; }
     public decimal TotalAmount { get; set; }
     public bool IsCancelled { get; set; }
-    public List<GetSaleItemResult> SaleItems { get; set; } = new();
+    public List<GetSaleItemResponse> SaleItems { get; set; } = new();
 }
 
 /// <summary>
-/// Represents an individual sale item in the sale result.
+/// Represents an individual sale item in the sale response.
 /// </summary>
-public class GetSaleItemResult
+public class GetSaleItemResponse
 {
     public Guid ProductId { get; set; }
     public string? ProductName { get; set; }

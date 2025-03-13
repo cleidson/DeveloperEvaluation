@@ -7,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 /// <summary>
 /// Query to retrieve a sale by ID.
 /// </summary>
-public class GetSaleQuery : IRequest<Sale>
+public class GetSaleQuery : IRequest<GetSaleResult>
 {
     public Guid SaleId { get; set; }
 }
