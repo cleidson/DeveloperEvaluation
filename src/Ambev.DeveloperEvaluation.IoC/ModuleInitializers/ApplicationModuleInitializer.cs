@@ -21,6 +21,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Ambev.DeveloperEvaluation.Application.Branchs.GetBranchs;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
 
 public class ApplicationModuleInitializer : IModuleInitializer
 {
@@ -40,6 +41,7 @@ public class ApplicationModuleInitializer : IModuleInitializer
             cfg.RegisterServicesFromAssemblyContaining<CreateSaleHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetSaleHandler>();
             cfg.RegisterServicesFromAssemblyContaining<CancelSaleHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<GetSalesHandler>();
 
             cfg.RegisterServicesFromAssemblyContaining<CreateProductHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetProductHandler>();
@@ -64,7 +66,10 @@ public class ApplicationModuleInitializer : IModuleInitializer
         // Product Validators
         builder.Services.AddScoped<IValidator<CreateProductCommand>, CreateProductValidator>();
         builder.Services.AddScoped<IValidator<UpdateProductCommand>, UpdateProductValidator>();
-        builder.Services.AddScoped<IValidator<DeleteProductCommand>, DeleteProductValidator>(); 
+        builder.Services.AddScoped<IValidator<DeleteProductCommand>, DeleteProductValidator>();
 
+        // Sales Validators
+        builder.Services.AddScoped<IValidator<CreateSaleCommand>, CreateSaleValidator>();        
+        builder.Services.AddScoped<IValidator<GetSalesQuery>, GetSalesValidator>();
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Ambev.DeveloperEvaluation.Application.Sales.CancelSale;
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
+using Ambev.DeveloperEvaluation.Application.Sales.GetSales;
 using Ambev.DeveloperEvaluation.WebApi.Common;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature;
 using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSale;
+using Ambev.DeveloperEvaluation.WebApi.Features.Sales.SalesFeature.GetSales;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -89,4 +91,26 @@ public class SalesController : BaseController
 
         return Ok(new { Message = "Venda cancelada com sucesso." });
     }
+
+
+    /// <summary>
+    /// Retorna a lista de vendas com filtros opcionais.
+    /// </summary>
+    [HttpGet]
+    [Authorize(Roles = "Manager,Admin")] // Apenas gerentes e administradores podem visualizar vendas
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetSales([FromQuery] GetSalesRequest request, CancellationToken cancellationToken)
+    {
+        var query = _mapper.Map<GetSalesQuery>(request);
+        var result = await _mediator.Send(query, cancellationToken);
+
+        if (result == null || result.Count == 0)
+            return NotFound(new { Message = "Nenhuma venda encontrada para os filtros informados." });
+
+        return Ok(result);
+    }
+
+
 }
