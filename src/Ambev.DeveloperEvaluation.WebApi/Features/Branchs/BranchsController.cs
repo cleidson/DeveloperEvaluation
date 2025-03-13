@@ -10,6 +10,8 @@ using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBra
 using Ambev.DeveloperEvaluation.Application.Branchs.DeleteBranch;
 using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.GetBranchs;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranchs;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 
@@ -77,6 +79,37 @@ public class BranchsController : BaseController
             return NotFound("Filial não encontrada.");
 
         return Ok(_mapper.Map<GetBranchResponse>(branch));
+    }
+
+    /// <summary>
+    /// Retrieves a list of branches based on optional filters.
+    /// </summary>
+    [HttpGet]
+    [Authorize(Roles = "Manager,Admin")]
+    [ProducesResponseType(typeof(ApiResponseWithData<List<GetBranchsResponse>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetBranchs([FromQuery] GetBranchsRequest request, CancellationToken cancellationToken)
+    {
+        var query = new GetBranchsQuery
+        {
+            Name = request.Name,
+            Location = request.Location
+        };
+
+        var branchs = await _mediator.Send(query, cancellationToken);
+
+        if (branchs == null || branchs.Count == 0)
+        {
+            return NotFound(new ApiResponse
+            {
+                Success = false,
+                Message = "Nenhuma filial encontrada."
+            });
+        }
+
+        var response = _mapper.Map<List<GetBranchsResponse>>(branchs);
+
+        return Ok(response);
     }
 
     /// <summary>

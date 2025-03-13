@@ -20,6 +20,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Ambev.DeveloperEvaluation.Application.Branchs.GetBranchs;
 
 public class ApplicationModuleInitializer : IModuleInitializer
 {
@@ -49,6 +50,7 @@ public class ApplicationModuleInitializer : IModuleInitializer
             cfg.RegisterServicesFromAssemblyContaining<CreateBranchHandler>();
             cfg.RegisterServicesFromAssemblyContaining<DeleteBranchHandler>();
             cfg.RegisterServicesFromAssemblyContaining<GetBranchHandler>();
+            cfg.RegisterServicesFromAssemblyContaining<GetBranchsHandler>();
             cfg.RegisterServicesFromAssemblyContaining<UpdateBranchHandler>();
         });
 
