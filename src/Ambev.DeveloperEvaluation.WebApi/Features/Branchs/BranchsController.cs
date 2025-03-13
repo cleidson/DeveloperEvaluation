@@ -7,6 +7,8 @@ using Ambev.DeveloperEvaluation.Application.Branchs.CreateBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.UpdateBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
+using Ambev.DeveloperEvaluation.Application.Branchs.DeleteBranch;
+using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 
@@ -31,7 +33,7 @@ public class BranchsController : BaseController
     /// Creates a new branch. Only Admins can create branches.
     /// </summary>
     [HttpPost]
-    [Authorize(Roles = "Admin")] //  Apenas administradores podem criar filiais
+    [Authorize(Roles = "Manager,Admin")]
     [ProducesResponseType(typeof(ApiResponseWithData<CreateBranchResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateBranch([FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
@@ -62,6 +64,7 @@ public class BranchsController : BaseController
     /// Retrieves a branch by its ID.
     /// </summary>
     [HttpGet("{id}")]
+    [Authorize(Roles = "Manager,Admin")]
     [ProducesResponseType(typeof(ApiResponseWithData<CreateBranchResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBranch([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -79,7 +82,7 @@ public class BranchsController : BaseController
     /// Updates a branch. Only Managers and Admins can update branches.
     /// </summary>
     [HttpPut("{id}")]
-    [Authorize(Roles = "Manager,Admin")] //  Apenas gerentes e administradores podem atualizar
+    [Authorize(Roles = "Manager,Admin")] 
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> UpdateBranch([FromRoute] Guid id, [FromBody] CreateBranchRequest request, CancellationToken cancellationToken)
@@ -99,4 +102,26 @@ public class BranchsController : BaseController
 
         return Ok(new { Message = "Filial atualizada com sucesso." });
     }
+
+
+    /// <summary>
+    /// Deletes a branch by its ID.
+    /// </summary>
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "Manager,Admin")]
+    [ProducesResponseType(typeof(ApiResponseWithData<DeleteBranchResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteBranch([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteBranchCommand { BranchId = id };
+        var result = await _mediator.Send(command, cancellationToken);
+
+    
+        var response = _mapper.Map<DeleteBranchResponse>(result);
+
+        return Ok(response); 
+    }
+
 }
+

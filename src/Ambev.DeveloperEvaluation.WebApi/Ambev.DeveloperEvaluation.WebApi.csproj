@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Branchs\BranchsFeature\GetBranch\" />
+    <Folder Include="Features\Branchs\BranchsFeature\UpdateBranch\" />
     <Folder Include="Features\Users\GetUser\" />
     <Folder Include="Features\Users\DeleteUser\" />
     <Folder Include="Features\Users\ListUsers\" />

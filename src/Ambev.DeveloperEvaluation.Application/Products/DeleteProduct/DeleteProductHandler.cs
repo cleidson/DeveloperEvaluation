@@ -13,28 +13,33 @@ namespace Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
 public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, DeleteProductResult>
 {
     private readonly IProductRepository _productRepository;
-    private readonly DeleteProductValidator _validator;
+    private readonly ISaleRepository _saleRepository;
+    private readonly IValidator<DeleteProductCommand> _validator;
 
-    public DeleteProductHandler(IProductRepository productRepository, ISaleRepository saleRepository)
+    public DeleteProductHandler(IProductRepository productRepository, ISaleRepository saleRepository, IValidator<DeleteProductCommand> validator)
     {
         _productRepository = productRepository;
-        _validator = new DeleteProductValidator(saleRepository);
+        _saleRepository = saleRepository;
+        _validator = validator;
     }
 
     public async Task<DeleteProductResult> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        // Validação do comando antes da execução
+        // Validação do comando
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            return new DeleteProductResult
+            {
+                Success = false,
+                Message = "Requisição inválida: " + string.Join("; ", validationResult.Errors)
+            };
         }
 
-        // Busca o produto no banco
+        // Buscar o produto
         var product = await _productRepository.GetByIdAsync(request.ProductId);
         if (product == null)
         {
-            // Retorna um resultado informando que o produto não foi encontrado, sem lançar exceção
             return new DeleteProductResult
             {
                 Success = false,
@@ -42,15 +47,13 @@ public class DeleteProductHandler : IRequestHandler<DeleteProductCommand, Delete
             };
         }
 
-        // Deleta o produto
+        // Excluir o produto
         await _productRepository.DeleteAsync(product);
 
-        // Retorna um resultado indicando sucesso
         return new DeleteProductResult
         {
             Success = true,
-            Message = "Produto deletado com sucesso.",
-            ProductId = request.ProductId
+            Message = "Produto deletado com sucesso."
         };
     }
 }
