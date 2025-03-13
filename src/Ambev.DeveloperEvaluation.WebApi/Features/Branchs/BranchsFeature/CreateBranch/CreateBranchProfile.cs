@@ -7,9 +7,9 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.Creat
 /// <summary>
 /// AutoMapper profile for branch mappings.
 /// </summary>
-public class CreateBranchProfile : Profile
+public class GetBranchProfile : Profile
 {
-    public CreateBranchProfile()
+    public GetBranchProfile()
     { 
         CreateMap<Branch, CreateBranchResponse>(); 
         CreateMap<CreateBranchRequest, CreateBranchCommand>();

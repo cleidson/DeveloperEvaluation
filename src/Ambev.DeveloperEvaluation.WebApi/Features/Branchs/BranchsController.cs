@@ -9,6 +9,7 @@ using Ambev.DeveloperEvaluation.Application.Branchs.GetBranch;
 using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.CreateBranch;
 using Ambev.DeveloperEvaluation.Application.Branchs.DeleteBranch;
 using Ambev.DeveloperEvaluation.Application.Products.DeleteProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Branchs.BranchsFeature.GetBranch;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Branches;
 
@@ -65,7 +66,7 @@ public class BranchsController : BaseController
     /// </summary>
     [HttpGet("{id}")]
     [Authorize(Roles = "Manager,Admin")]
-    [ProducesResponseType(typeof(ApiResponseWithData<CreateBranchResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponseWithData<GetBranchResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBranch([FromRoute] Guid id, CancellationToken cancellationToken)
     {
@@ -75,7 +76,7 @@ public class BranchsController : BaseController
         if (branch == null)
             return NotFound("Filial não encontrada.");
 
-        return Ok(_mapper.Map<CreateBranchResponse>(branch));
+        return Ok(_mapper.Map<GetBranchResponse>(branch));
     }
 
     /// <summary>
