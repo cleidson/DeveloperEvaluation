@@ -93,11 +93,14 @@ Este comando subirá os seguintes containers:
 
 ### **5. Testando a API**
 
-A API pode ser testada via **Postman** ou **Swagger** em:
+A API pode ser testada via **Swagger** em:
 
 ```sh
  http://localhost:8080/swagger/index.html
 ```
+
+**Postman** (Nota: será preciso gerar o token e ids e em seguida substituir o que está nas apis na collection)  em:
+[Postman](./doc/DeveloperEvalution.postman_collection.json)
 
 
 ## **Arquitetura do Projeto**
